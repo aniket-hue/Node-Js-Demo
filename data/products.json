@@ -3,6 +3,14 @@
     "title": "A Book",
     "imageUrl": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg",
     "description": "This is an awesome book!",
-    "price": "19"
+    "price": "19",
+    "id": "314"
+  },
+  {
+    "title": "bicycle",
+    "imageUrl": "https://lightspeed.bike/wp-content/uploads/2019/09/lightspeedRush.png",
+    "description": "",
+    "price": "123",
+    "id": "324"
   }
 ]
