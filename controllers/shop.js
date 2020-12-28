@@ -2,9 +2,9 @@ const Product = require("../models/product");
 const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll((products) => {
+  Product.fetchAll().then(([rows]) => {
     res.render("shop/product-list", {
-      prods: products,
+      prods: rows,
       pageTitle: "All Products",
       path: "/products",
     });
@@ -13,19 +13,19 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.id;
-  Product.fetchOne((product) => {
+  Product.fetchOne(prodId).then(([product]) => {
     res.render("shop/product-detail", {
-      product,
+      product: product[0],
       pageTitle: "Product Detail",
       path: "/products",
     });
-  }, prodId);
+  });
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll((products) => {
+  Product.fetchAll().then(([rows]) => {
     res.render("shop/index", {
-      prods: products,
+      prods: rows,
       pageTitle: "Shop",
       path: "/",
     });
@@ -34,7 +34,7 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   Cart.getCart((cart) => {
-    Product.fetchAll((products) => {
+    Product.fetchAll().then(([products]) => {
       const cartProduct = [];
       for (product of products) {
         const cartProductData = cart.products.find((id) => product.id);
@@ -52,9 +52,9 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
   const id = req.body.productId;
-  Product.fetchOne((product) => {
+  Product.fetchOne(id).then(([product]) => {
     Cart.addProduct(product.id, product.price);
-  }, id);
+  });
   return res.redirect("/cart");
 };
 
