@@ -19,7 +19,7 @@ exports.postAddProduct = (req, res, next) => {
   const description = req.body.description;
   const product = new Product(null, title, imageUrl, description, price);
   product.save();
-  res.redirect("/");
+  return res.redirect("/");
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -50,7 +50,7 @@ exports.postEditProduct = (req, res, next) => {
 
   updatedProduct.save();
 
-  res.redirect("/");
+  return res.redirect("/");
 };
 
 exports.postDeleteProduct = (req, res, next) => {
