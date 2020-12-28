@@ -17,8 +17,13 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Product(null, title, imageUrl, description, price);
-  product.save().then(() => res.redirect("/"));
+
+  Product.create({
+    title,
+    price,
+    imageUrl,
+    description,
+  }).then(() => res.redirect("/"));
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -26,15 +31,13 @@ exports.getEditProduct = (req, res, next) => {
   if (!editMode) return res.redirect("/");
   const id = req.params.productId;
 
-  Product.fetchOne(
-    (product) =>
-      res.render("admin/edit-product", {
-        product,
-        pageTitle: "Add Product",
-        path: "/admin/edit-product",
-        editing: editMode,
-      }),
-    id
+  Product.findByPk(id).then((product) =>
+    res.render("admin/edit-product", {
+      product,
+      pageTitle: "Add Product",
+      path: "/admin/edit-product",
+      editing: editMode,
+    })
   );
 };
 
@@ -54,11 +57,11 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const id = req.body.id;
-  Product.delete(id).then(() => res.redirect("/"));
+  Product.destroy({ where: { id: id } }).then(() => res.redirect("/"));
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll().then(([products]) => {
+  Product.findAll().then((products) => {
     res.render("admin/products", {
       prods: products,
       pageTitle: "Admin Products",
